@@ -96,7 +96,8 @@ class userController extends Controller
     {
         //
     }
-       public function login(Request $request){
+
+    public function login(Request $request){
         $data_token = ['email'=>$request->email];
         
         $user = User::where($data_token)->first();  
@@ -110,5 +111,22 @@ class userController extends Controller
             }   
         }     
         return response()->json(["Error" => "No se ha encontrado"], 401);
+    }
+
+    public function recoverPassword (Request $request){
+        $data_token = ['email'=>$request->email];        
+        $user = User::where($data_token)->first();  
+        
+        if (isset($user)) {            
+            $recoverNumber = rand (10000,99999): int;
+            var_dump($recoverNumber);exit();
+            $mensaje = "Para recuperar la contraseña introduce los siguientes digitos: " . $recoverNumber;
+            //mail('$user->email', 'Recuperar contraseña', $mensaje);
+            response()->json(["Error" => "Se ha mandado un codigo de 5 digitos a su email, porfavor confirma que eres tu"]);
+        }else{
+            response()->json(["Error" => "El Email no existe"]);
+        }
+
+
     }
 }
