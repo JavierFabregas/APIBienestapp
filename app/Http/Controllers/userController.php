@@ -116,27 +116,15 @@ class userController extends Controller
     }
 
     public function recoverPassword (Request $request){
-        $data_token = ['email'=>$request->email];        
-        $user = User::where($data_token)->first();  
-        
-        if (isset($user)) {            
-            $recoverNumber = rand (10000,99999);
-            var_dump($recoverNumber);exit();
-            $mensaje = "Para recuperar la contraseña introduce los siguientes digitos: " . $recoverNumber;
-            //mail('$user->email', 'Recuperar contraseña', $mensaje);
-            response()->json(["Error" => "Se ha mandado un codigo de 5 digitos a su email, porfavor confirma que eres tu"]);
-        }else{
-            response()->json(["Error" => "El Email no existe"]);
-        }
-
-
-    }
-    public function recoverPassword2 (Request $request){
 
         $user = User::where('email',$request->email)->first();  
         if (isset($user)) {   
             $newPassword = self::randomPassword();
             self::sendEmail($user->email,$newPassword);
+            /*
+                $user->password = $newPasword;
+                $user->update();
+            */
             return response()->json(["Success" => "Se ha restablecido su contraseña, revise su correo electronico."]);
         }else{
             return response()->json(["Error" => "El Email no existe"]);
@@ -146,12 +134,9 @@ class userController extends Controller
     public function sendEmail($email,$newPassword){
         $para      = $email;
         $titulo    = 'Recuperar contraseña de Bienestapp';
-        $mensaje   = 'Se ha establecido '.$newPassword.' como su nueva contraseña.';
-        $cabeceras = 'From: Javier_Fabregas@Bienestapp.com' . "\r\n" .
-                     'Reply-To: Javier_Fabregas@Bienestapp.com' . "\r\n" .
-                     'X-Mailer: PHP/' . phpversion();
-
-        mail($para, $titulo, $mensaje, $cabeceras);
+        $mensaje   = 'Se ha establecido "'.$newPassword.'" como su nueva contraseña.';
+        print($mensaje);exit();
+        mail($para, $titulo, $mensaje);
     }
     public function randomPassword() {
         $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
