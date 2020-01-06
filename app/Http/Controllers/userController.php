@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use App\Helper\Token;
 
 class userController extends Controller
 {
@@ -118,7 +120,7 @@ class userController extends Controller
         $user = User::where($data_token)->first();  
         
         if (isset($user)) {            
-            $recoverNumber = rand (10000,99999): int;
+            $recoverNumber = rand (10000,99999);
             var_dump($recoverNumber);exit();
             $mensaje = "Para recuperar la contraseña introduce los siguientes digitos: " . $recoverNumber;
             //mail('$user->email', 'Recuperar contraseña', $mensaje);
@@ -128,5 +130,37 @@ class userController extends Controller
         }
 
 
+    }
+    public function recoverPassword2 (Request $request){
+
+        $user = User::where('email',$request->email)->first();  
+        if (isset($user)) {   
+            $newPassword = self::randomPassword();
+            self::sendEmail($user->email,$newPassword);
+            return response()->json(["Success" => "Se ha restablecido su contraseña, revise su correo electronico."]);
+        }else{
+            return response()->json(["Error" => "El Email no existe"]);
+        }
+
+    }
+    public function sendEmail($email,$newPassword){
+        $para      = $email;
+        $titulo    = 'Recuperar contraseña de Bienestapp';
+        $mensaje   = 'Se ha establecido '.$newPassword.' como su nueva contraseña.';
+        $cabeceras = 'From: Javier_Fabregas@Bienestapp.com' . "\r\n" .
+                     'Reply-To: Javier_Fabregas@Bienestapp.com' . "\r\n" .
+                     'X-Mailer: PHP/' . phpversion();
+
+        mail($para, $titulo, $mensaje, $cabeceras);
+    }
+    public function randomPassword() {
+        $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 10; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
     }
 }
