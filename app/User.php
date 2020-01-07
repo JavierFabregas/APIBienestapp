@@ -19,6 +19,7 @@ class User extends Model
         $user->email = $request->email;
         $user->save();
     }
+    
     Public function userExists($email){
         $users = self::where('email',$email)->get();
         
