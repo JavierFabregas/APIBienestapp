@@ -34,7 +34,14 @@ class applicationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $application = new application();
+        if(!$application->applicationExists($request->name)){
+            $application->new_application($request);
+
+            return response()->json(["Success" => "Se ha añadido la aplicacion."]);
+        }else{
+            return response()->json(["Error" => "La aplicacion ya existe"]);
+        }
     }
 
     /**
@@ -68,7 +75,17 @@ class applicationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $application = application::where('name',$request->name)->first();
+        if (isset($application)) {
+            
+            $application->name = $request->name;
+            $application->icon = $request->icon;
+            $application->update();
+        
+            return response()->json(["Success" => "Se ha modificado la aplicacion."]);
+        }else{
+            return response()->json(["Error" => "La aplicacion no existe"]);
+        }
     }
 
     /**
@@ -77,8 +94,17 @@ class applicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        
+        $application = application::where('name',$request->name)->first();
+        if (isset($application)) {
+
+            $application->delete();
+        
+            return response()->json(["Success" => "Se ha borrado la aplicacion."]);
+        }else{
+            return response()->json(["Error" => "La aplicacion no existe"]);
+        }
     }
 }

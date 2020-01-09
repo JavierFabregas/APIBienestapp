@@ -35,6 +35,8 @@ class restrictionController extends Controller
     public function store(Request $request)
     {
         //
+        $restriction = new restrict();
+        $restriction->new_Restriction($request);
     }
 
     /**

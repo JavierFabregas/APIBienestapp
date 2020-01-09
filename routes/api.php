@@ -22,5 +22,8 @@ Route::post('register','userController@store');
 Route::post('recuperarContraseña','userController@recoverPassword');
 
 Route::group(['middleware' => ['auth']], function (){
-
+	Route::apiResource('application','applicationController');
+	Route::apiResource('restriction','restrictionController');
+	Route::apiResource('usage','usageController');
+	Route::apiResource('user','userController');
 });

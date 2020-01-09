@@ -94,9 +94,20 @@ class userController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $email = $request->data_token->email;
+        $user = User::where('email',$email)->first();
+        if (isset($user)) {            
+            if ($request->password == decrypt($user->password)) {
+               $user->delete();            
+                return response()->json(["Success" => "Se ha borrado el usuario."]);
+            }else{
+                return response()->json(["Error" => "la contraseña no coincide con la del usuario"]);
+            }
+        }else{
+            return response()->json(["Error" => "El ususario no existe"]);
+        }
     }
 
     public function login(Request $request){
@@ -105,7 +116,7 @@ class userController extends Controller
         $user = User::where($data_token)->first();  
        
         if ($user!=null) {       
-            if($request->password == $user->password)
+            if($request->password == decrypt($user->password))
             {       
                 $token = new Token($data_token);
                 $tokenEncoded = $token->encode();
@@ -121,16 +132,17 @@ class userController extends Controller
         if (isset($user)) {   
             $newPassword = self::randomPassword();
             self::sendEmail($user->email,$newPassword);
-            /*
-                $user->password = $newPasword;
+            
+                $user->password = $newPassword;
                 $user->update();
-            */
+            
             return response()->json(["Success" => "Se ha restablecido su contraseña, revise su correo electronico."]);
         }else{
             return response()->json(["Error" => "El Email no existe"]);
         }
 
     }
+
     public function sendEmail($email,$newPassword){
         $para      = $email;
         $titulo    = 'Recuperar contraseña de Bienestapp';
@@ -138,6 +150,7 @@ class userController extends Controller
         print($mensaje);exit();
         mail($para, $titulo, $mensaje);
     }
+    
     public function randomPassword() {
         $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         $pass = array(); //remember to declare $pass as an array
