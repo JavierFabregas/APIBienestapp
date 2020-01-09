@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class application extends Model
 {
@@ -12,7 +13,7 @@ class application extends Model
     
     public function new_application(Request $request)
     {
-        $application = new User;
+        $application = new application;
         $application->name = $request->name;
         $application->icon = $request->icon;
         $application->save();

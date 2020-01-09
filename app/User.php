@@ -16,6 +16,7 @@ class User extends Model
         $user = new User;
         $user->name = $request->name;
         $user->password = encrypt($request->password);
+       // var_dump(encrypt($request->password));exit();
         $user->email = $request->email;
         $user->save();
     }

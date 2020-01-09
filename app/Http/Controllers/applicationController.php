@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\application;
+use App\Helper\Token;
 
 class applicationController extends Controller
 {
@@ -52,7 +54,15 @@ class applicationController extends Controller
      */
     public function show($id)
     {
-        //
+        $applications = application::all();
+       // var_dump($applications);exit();
+
+        if(isset($applications)){
+           
+            return response()->json(["Success" => $applications]);
+        }else{
+            return response()->json(["Error" => "No hay aplicaciones guardadas"]);
+        }
     }
 
     /**
