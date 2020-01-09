@@ -27,3 +27,4 @@ Route::group(['middleware' => ['auth']], function (){
 	Route::apiResource('usage','usageController');
 	Route::apiResource('user','userController');
 });
+

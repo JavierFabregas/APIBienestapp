@@ -60,9 +60,14 @@ class userController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show(Request $request)
+    {        
+        $email = $request->data_token->email;
+        $user = User::where('email',$email)->first();
+
+        if(isset($user)){
+
+            
     }
 
     /**
@@ -147,7 +152,6 @@ class userController extends Controller
         $para      = $email;
         $titulo    = 'Recuperar contraseña de Bienestapp';
         $mensaje   = 'Se ha establecido "'.$newPassword.'" como su nueva contraseña.';
-        print($mensaje);exit();
         mail($para, $titulo, $mensaje);
     }
     
