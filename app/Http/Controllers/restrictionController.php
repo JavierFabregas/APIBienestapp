@@ -39,8 +39,6 @@ class restrictionController extends Controller
     public function store(Request $request)
     {
 
-        //var_dump($request->max_time);exit();
-        //check application
         $restriction = new restriction();
 
         $application = application::where('name',$request->name)->first();
@@ -79,16 +77,6 @@ class restrictionController extends Controller
             return response()->json(["Error" => "La aplicacion no existe"]);
         }
 
-
-        //check user
-
-
-        //check max_time
-        //check start-finish
-
-
-        //store
-        //$restriction->new_Restriction($request);
     }
 
     /**
@@ -97,9 +85,24 @@ class restrictionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $email = $request->data_token->email;
+        $user = User::where('email',$email)->first();
+
+
+        $restrictions = restriction::where('user_id',$user->id)->get();
+
+        if (isset($restrictions)) {
+            
+            return response()->json(["Success" => $restrictions]);   
+
+        }else{
+          
+            return response()->json(["Error" => "Debe de haber alguna restriction"]);    
+
+        }
+        
     }
 
     /**
