@@ -54,9 +54,8 @@ class applicationController extends Controller
      */
     public function show($id)
     {
-        $applications = application::all();
-       // var_dump($applications);exit();
-
+        $application = new application();
+        $applications = $application->getApplications();
         if(isset($applications)){
            
             return response()->json(["Success" => $applications]);

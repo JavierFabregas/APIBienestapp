@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use App\application;
+use App\restriction;
+use App\Helper\Token;
 
 class restrictionController extends Controller
 {
@@ -34,9 +38,57 @@ class restrictionController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $restriction = new restrict();
-        $restriction->new_Restriction($request);
+
+        //var_dump($request->max_time);exit();
+        //check application
+        $restriction = new restriction();
+
+        $application = application::where('name',$request->name)->first();
+        if (isset($application)) {    
+
+            $email = $request->data_token->email;
+            $user = User::where('email',$email)->first();
+
+            if (isset($user)) {
+
+                if (is_null($request->max_time)) {
+
+                    if (is_null($request->start_hour_restriction) || is_null($request->finish_hour_restriction)) {
+
+                        return response()->json(["Error" => "Debe de haber alguna restriction"]);
+
+                    }else{     
+
+                        $restriction->new_Restriction($request,$user->id,$application->id);
+                        return response()->json(["Success" => "Se ha añadido la restriction"]);
+
+                    }
+                }else{
+
+                    $restriction->new_Restriction($request,$user->id,$application->id);
+                    return response()->json(["Success" => "Se ha añadido la restriction"]);
+
+                }
+            }else{
+
+                return response()->json(["Error" => "El usuario no existe"]);
+
+            }
+
+        }else{
+            return response()->json(["Error" => "La aplicacion no existe"]);
+        }
+
+
+        //check user
+
+
+        //check max_time
+        //check start-finish
+
+
+        //store
+        //$restriction->new_Restriction($request);
     }
 
     /**
