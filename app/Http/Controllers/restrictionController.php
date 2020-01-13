@@ -121,7 +121,7 @@ class restrictionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
       $restriction = restriction::where('id',$request->id)->first();
          if (isset($restriction)) {
@@ -159,8 +159,18 @@ class restrictionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        
+        $restriction = restriction::where('id',$request->id)->first();
+
+        if (isset($restriction)) {
+            $restriction->delete();
+            return response()->json(["Success" => 'Se ha eliminado la restriccion']);   
+
+        }else{
+          
+            return response()->json(["Error" => "La restriction no existe"]);    
+
+        }
     }
 }
