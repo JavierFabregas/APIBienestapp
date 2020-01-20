@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login','userController@login');
 Route::post('register','userController@store');
-Route::post('recuperarContraseña','userController@recoverPassword');
+Route::post('recuperarContrasena','userController@recoverPassword');
 
 Route::group(['middleware' => ['auth']], function (){
 	Route::apiResource('application','applicationController');
