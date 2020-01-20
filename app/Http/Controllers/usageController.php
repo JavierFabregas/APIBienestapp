@@ -87,9 +87,35 @@ class usageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $email = $request->data_token->email;
+        $user = User::where('email',$email)->first();        
+        $usages = usage::where('user_id',$user->id)->get();
+
+
+        $idApplicationUsages = array();
+
+        $countUsages = count($usages);
+        $totalTime = array();
+
+        foreach ($usages as $key => $usage) {
+            if (!(in_array($usage->application_id, $idApplicationUsages))) {
+                array_push($idApplicationUsages, $usage->application_id);
+                array_push($totalTime, 0);
+            }
+        }
+
+        for ($i=0; $i < count($idApplicationUsages) ; $i++) {          
+            foreach ($usages as $key => $usage) {
+                if ($usage->application_id == $idApplicationUsages[$i]) {
+                    $totalTime[$i] += $usage->useTime;
+                }
+            }   
+        }
+        
+        var_dump($totalTime);
+        exit();
     }
 
     /**
