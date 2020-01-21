@@ -1,12 +1,12 @@
 <?php
 
 namespace App;
-
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class usage extends Model
 {
-    protected $table = 'usage';
+    protected $table = 'app_usage';
     protected $fillable = ['day','useTime','location','user_id','application_id'];
     
     public function register($day,$useTime,$location,$user_id,$application_id)
@@ -19,6 +19,16 @@ class usage extends Model
         $usage->application_id = $application_id;
         $usage->save();
     }
+
+    public function getUsage ($user_id)
+    {
+        $usages = DB::table('app_usage')->select('user_id','application_id','day',DB::raw("SUM(useTime) as totalTime"))
+                                        ->from('app_usage')
+                                        ->groupBy('application_id','user_id','day')
+                                        ->get();
+        return $usages;
+    }
+
     /*
     Public function userExists($id){
         $usages = self::where('email',$id)->get();
