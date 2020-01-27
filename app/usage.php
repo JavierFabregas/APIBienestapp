@@ -24,6 +24,7 @@ class usage extends Model
     {
         $usages = DB::table('app_usage')->select('user_id','application_id','day',DB::raw("SUM(useTime) as totalTime"))
                                         ->from('app_usage')
+                                        ->where('user_id like $user_id')
                                         ->groupBy('application_id','user_id','day')
                                         ->get();
         return $usages;

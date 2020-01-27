@@ -39,15 +39,6 @@ class usageController extends Controller
      */
     public function store(Request $request)
     {
-        // recivir CSV y añadirlo a la base de datos
-        /*
-            Day -> date (dia de hoy)
-            useTime -> Time ((Hora de apertura - Hora de cierre) + useTime anterior)
-            location -> string
-            user_id (lo sacamos del token)
-            application_id (lo sacamos con el nombre de la app)
-
-        */
 
             $csv = array_map('str_getcsv' ,file('/Applications/MAMP/htdocs/APIBienestapp/storage/app/usage.csv'));
             $countArray = count($csv);
@@ -95,35 +86,8 @@ class usageController extends Controller
         $usage = new usage();        
         $usages = $usage->getUsage($user->id);
 
-        var_dump($usages);exit();
 
-        // $idApplicationUsages = array();
-
-        // $countUsages = count($usages);
-        // $totalTime = array();
-
-        // foreach ($usages as $key => $usage) {
-        //     if (!(in_array($usage->application_id, $idApplicationUsages))) {
-        //         array_push($idApplicationUsages, $usage->application_id);
-        //         array_push($totalTime, 0);
-        //     }
-        // }
-
-        // for ($i=0; $i < count($idApplicationUsages) ; $i++) {          
-        //     foreach ($usages as $key => $usage) {
-        //         if ($usage->application_id == $idApplicationUsages[$i]) {
-        //             $totalTime[$i] += $usage->useTime;
-        //         }
-        //     }   
-        // }
-        /*
-        idApplicationUsages -> tiene los id de las aplicaciones [4,5,6,7,8,9]
-        totalTime -> tiene la suma del uso de las aplicaciones en el orden de idApplicationUsages [20,6616,988,5341,5517,3237]
-        hay que mostrar: "nombre aplicacion" "tiempo de uso de la aplicacion" "dia que se ha usado la aplicacion"
-        */
-
-        // var_dump($totalTime);
-        // exit();
+        return response()->json(["Success" => $usages]);
     }
 
     /**
