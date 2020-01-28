@@ -79,15 +79,15 @@ class usageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request)
     {
         $email = $request->data_token->email;
         $user = User::where('email',$email)->first();
         $usage = new usage();        
         $usages = $usage->getUsage($user->id);
-
-
-        return response()->json(["Success" => $usages]);
+        
+        
+        return response()->json($usages , 200);
     }
 
     /**
