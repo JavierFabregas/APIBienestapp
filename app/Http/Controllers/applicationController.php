@@ -58,7 +58,7 @@ class applicationController extends Controller
         $applications = $application->getApplications();
         if(isset($applications)){
            
-            return response()->json(["Success" => $applications]);
+            return response()->json($applications,200);
         }else{
             return response()->json(["Error" => "No hay aplicaciones guardadas"]);
         }

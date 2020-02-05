@@ -53,27 +53,27 @@ class restrictionController extends Controller
 
                     if (is_null($request->start_hour_restriction) || is_null($request->finish_hour_restriction)) {
 
-                        return response()->json(["Error" => "Debe de haber alguna restriction"]);
+                        return response()->json(["Error" => "Debe de haber alguna restriction"],400);
 
                     }else{     
 
                         $restriction->new_Restriction($request,$user->id,$application->id);
-                        return response()->json(["Success" => "Se ha añadido la restriction"]);
+                        return response()->json(["Success" => "Se ha añadido la restriction"],200);
 
                     }
                 }else{
 
                     $restriction->new_Restriction($request,$user->id,$application->id);
-                    return response()->json(["Success" => "Se ha añadido la restriction"]);
+                    return response()->json(["Success" => "Se ha añadido la restriction"],200);
                 }
 
             }else{
 
-                return response()->json(["Error" => "El usuario no existe"]);
+                return response()->json(["Error" => "El usuario no existe"],400);
             }
 
         }else{
-            return response()->json(["Error" => "La aplicacion no existe"]);
+            return response()->json(["Error" => "La aplicacion no existe"],400);
         }
     }
 
