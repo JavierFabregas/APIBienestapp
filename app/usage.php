@@ -29,6 +29,15 @@ class usage extends Model
                                         ->get();
         return $usages;
     }
+    public function getLocationUsage ($user_id)
+    {
+        $usages = DB::table('app_usage')->select('user_id','application_id','location')
+                                        ->from('app_usage')
+                                        ->where('user_id', $user_id)
+                                        ->groupBy('user_id','application_id','location')
+                                        ->get();
+        return $usages;
+    }
 
     /*
     Public function userExists($id){

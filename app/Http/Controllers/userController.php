@@ -93,13 +93,16 @@ class userController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $user = user::where('email',$request->data_token->email)->first();
         if (isset($user)) {
-            
-            $user->name = $request->name;
-            $user->password = $request->password;
+
+            if(isset($request->name)){
+                $user->name = $request->name;
+            }
+
+            $user->password = encrypt($request->password);
             $user->update();
         
             return response()->json(["Success" => "Se ha modificado el usuario."]);
